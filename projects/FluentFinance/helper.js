@@ -13,18 +13,17 @@ const unwrapUniswapV3LPs = async (
   chain = 'ethereum', 
   transformAddress = (addr) => addr) => {
 
-  return await Promise.all(
+  return await Promise.allSettled(
     univ3_Positions.map(async (univ3_Position) => {
 
       try {
-
         // Get share of that LP as balanceOf / totalSupply
         const { output: totalSupply } = await sdk.api.abi.call({
           block,
           abi: 'erc20:totalSupply',
           target: univ3_Position.vault,
           chain
-        }); console.log('totalSupply', ethers.utils.formatEther(totalSupply));
+        }); console.log('totalSupply', totalSupply, ethers.utils.formatEther(totalSupply));
 
         const { output: heldLPshares } = await sdk.api.abi.call({
           block,
